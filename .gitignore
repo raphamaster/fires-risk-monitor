@@ -1,0 +1,33 @@
+cat > .gitignore <<'EOF'
+# venv / cache
+.venv/
+__pycache__/
+*.pyc
+
+# configs (secrets)
+configs/.env
+*.env
+
+# MongoDB runtime (NÃO versionar)
+data/mongo/
+data/mongo/**
+
+# Dados grandes (ajuste se quiser versionar algo)
+data/raw/
+data/tmp/
+data/silver/
+data/gold/
+
+# Se quiser manter só os 3 Parquet "single", remova o bloco data/gold acima
+# e ignore apenas as partições:
+# data/gold/fact_fires_daily/
+# data/gold/fact_risk_daily/
+# data/gold/dim_municipio/
+
+# Power BI (se não usar LFS)
+reports/*.pbix
+
+# Sistema
+.DS_Store
+Thumbs.db
+EOF
