@@ -1,6 +1,31 @@
 PY=python
 VENV=.venv
 
+# Use assim:
+# make update
+# make update ARGS="--coords-csv data/ref/coords_municipios.csv --overwrite"
+# ou açúcar:
+# make update DAYS=10 COORDS=data/ref/coords_municipios.csv OVERWRITE=1
+
+# Monta ARGS automaticamente a partir de variáveis opcionais
+ifeq ($(strip $(DAYS)),)
+  DAYS_ARG=
+else
+  DAYS_ARG=--days $(DAYS)
+endif
+
+ifeq ($(strip $(COORDS)),)
+  COORDS_ARG=
+else
+  COORDS_ARG=--coords-csv $(COORDS)
+endif
+
+ifeq ($(strip $(OVERWRITE)),1)
+  OVERWRITE_ARG=--overwrite
+else
+  OVERWRITE_ARG=
+endif
+
 .PHONY: help install venv lint format fires weather ref gold update clean
 
 help:
@@ -11,7 +36,7 @@ help:
 	@echo "make weather   -> open-meteo"
 	@echo "make ref       -> carrega municipios (se CSV existir)"
 	@echo "make gold      -> exporta parquet (partitioned + single)"
-	@echo "make update    -> roda pipeline completa"
+	@echo "make update    -> roda pipeline completa (ARGS=..., DAYS=, COORDS=, OVERWRITE=1)"
 	@echo "make clean     -> remove caches"
 
 venv:
@@ -47,7 +72,7 @@ gold: venv
 	@. $(VENV)/bin/activate && $(PY) -m etl.gold.export_parquet
 
 update: venv
-	@./scripts/run_update.sh
+	@./scripts/run_update.sh $(DAYS_ARG) $(COORDS_ARG) $(OVERWRITE_ARG) $(ARGS)
 
 clean:
 	@find . -name "__pycache__" -type d -prune -exec rm -rf {} +
