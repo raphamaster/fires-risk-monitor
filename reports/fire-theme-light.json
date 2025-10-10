@@ -1,0 +1,16 @@
+{
+  "name": "Fires • Rescue • Prevention (Light)",
+  "dataColors": [
+    "#D32F2F",
+    "#F57C00",
+    "#F9A825",
+    "#1565C0",
+    "#2E7D32",
+    "#8D6E63",
+    "#FF7043",
+    "#546E7A"
+  ],
+  "background": "#FFFFFF",
+  "foreground": "#263238",
+  "tableAccent": "#F57C00"
+}
