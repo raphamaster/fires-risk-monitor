@@ -10,5 +10,5 @@ services:
       MONGO_INITDB_DATABASE: admin
     volumes:
       - ./docker/mongo/mongo-init.js:/docker-entrypoint-initdb.d/mongo-init.js:ro
-      - ./data/mongo:/data/db
+      - /home/raphaelfranco/Projetos/docker-data/mongo/data/mongo:/data/db
     restart: unless-stopped

@@ -110,7 +110,7 @@ fi
 # -------- INPE --------
 if ! $SKIP_FIRES; then
   echo "[run] INPE fires (days=${DAYS})..." | tee -a "$LOG"
-  python -m etl.inpe.fetch_fires --days "${DAYS}" 2>&1 | tee -a "$LOG"
+  python3 -m etl.inpe.fetch_fires --days "${DAYS}" 2>&1 | tee -a "$LOG"
 else
   echo "[skip] INPE fires" | tee -a "$LOG"
 fi
@@ -118,7 +118,7 @@ fi
 # -------- WEATHER --------
 if ! $SKIP_WEATHER; then
   echo "[run] Weather (Open-Meteo)..." | tee -a "$LOG"
-  python -m etl.weather.fetch_weather 2>&1 | tee -a "$LOG"
+  python3 -m etl.weather.fetch_weather 2>&1 | tee -a "$LOG"
 else
   echo "[skip] Weather" | tee -a "$LOG"
 fi
@@ -127,10 +127,10 @@ fi
 if ! $SKIP_REF; then
   if [ -f "data/ref/municipios_raw.csv" ]; then
     echo "[run] Ref municipios (data/ref/municipios_raw.csv)..." | tee -a "$LOG"
-    python -m etl.ibge.load_ref_municipios --csv data/ref/municipios_raw.csv 2>&1 | tee -a "$LOG"
+    python3 -m etl.ibge.load_ref_municipios --csv data/ref/municipios_raw.csv 2>&1 | tee -a "$LOG"
   elif [ -f "data/ref/municipios.csv" ]; then
     echo "[run] Ref municipios (data/ref/municipios.csv)..." | tee -a "$LOG"
-    python -m etl.ibge.load_ref_municipios --csv data/ref/municipios.csv 2>&1 | tee -a "$LOG"
+    python3 -m etl.ibge.load_ref_municipios --csv data/ref/municipios.csv 2>&1 | tee -a "$LOG"
   else
     echo "[info] Sem CSV de municipios (nome/uf/populacao). Pulando." | tee -a "$LOG"
   fi
@@ -148,9 +148,9 @@ if ! $SKIP_COORDS; then
   if [ -n "${COORDS_CSV}" ] && [ -f "${COORDS_CSV}" ]; then
     echo "[run] Coords municipios (${COORDS_CSV}) overwrite=${OVERWRITE} ..." | tee -a "$LOG"
     if $OVERWRITE; then
-      python -m etl.ibge.load_coords_csv --csv "${COORDS_CSV}" --overwrite 2>&1 | tee -a "$LOG"
+      python3 -m etl.ibge.load_coords_csv --csv "${COORDS_CSV}" --overwrite 2>&1 | tee -a "$LOG"
     else
-      python -m etl.ibge.load_coords_csv --csv "${COORDS_CSV}" 2>&1 | tee -a "$LOG"
+      python3 -m etl.ibge.load_coords_csv --csv "${COORDS_CSV}" 2>&1 | tee -a "$LOG"
     fi
   else
     echo "[info] Sem CSV de coordenadas (lat/lon). Pulando." | tee -a "$LOG"
@@ -162,7 +162,7 @@ fi
 # -------- GOLD --------
 if ! $SKIP_GOLD; then
   echo "[run] Export Gold (Parquet)..." | tee -a "$LOG"
-  python -m etl.gold.export_parquet 2>&1 | tee -a "$LOG"
+  python3 -m etl.gold.export_parquet 2>&1 | tee -a "$LOG"
 else
   echo "[skip] GOLD" | tee -a "$LOG"
 fi
