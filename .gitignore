@@ -25,7 +25,7 @@ data/gold/
 # data/gold/dim_municipio/
 
 # Power BI (se não usar LFS)
-reports/*.pbix
+#reports/*.pbix
 
 # Sistema
 .DS_Store
