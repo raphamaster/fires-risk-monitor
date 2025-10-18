@@ -6,7 +6,41 @@ Pipeline de dados para monitorar **focos de queimadas** e **risco associado** (c
 - **Camada Gold** em **Parquet** (particionada)
 - **Relatório Power BI** (3 páginas)
 
-## Estrutura de Diretórios
+---
+
+## 🌎 Visão Geral do Dashboard
+
+O relatório Power BI consolidado apresenta três páginas temáticas:
+
+1. **Visão Geral do Risco de Queimadas**
+   - Indicadores de risco médio (7d MA)
+   - Série temporal de focos de fogo
+   - Distribuição espacial dos eventos por município
+
+2. **Análise Meteorológica**
+   - Relação entre temperatura média, vento máximo e focos de fogo
+   - Heatmap de risco e correlações climáticas
+
+3. **Mapa de Calor Geográfico**
+   - Distribuição dos focos e faixas de risco (Risk Band)
+   - Dados por latitude e longitude
+
+📊 O modelo do Power BI está disponível em:
+```
+reports/FiresRiskMonitor.pbit
+```
+
+📸 Imagens do dashboard (pasta `reports/screens`):
+
+| Página | Preview |
+|:-------|:---------|
+| **1 — Overview** | ![Dashboard Overview](reports/screens/Screenshot_53.png) |
+| **2 — Meteorologia e Fogo** | ![Meteorology and Fire](reports/screens/Screenshot_54.png) |
+| **3 — Mapa de Calor** | ![Heatmap](reports/screens/Screenshot_55.png) |
+
+---
+
+## 🗂 Estrutura de Diretórios
 
 ```
 fires-risk-monitor/
@@ -21,12 +55,20 @@ fires-risk-monitor/
 │  └─ gold/
 ├─ configs/
 │  └─ .env.example
+├─ reports/
+│  ├─ FiresRiskMonitor.pbit
+│  └─ screens/
+│     ├─ page1_overview.png
+│     ├─ page2_weather.png
+│     └─ page3_heatmap.png
 ├─ .gitignore
 ├─ docker-compose.yml
 └─ README.md
 ```
 
-## Pré-requisitos
+---
+
+## ⚙️ Pré-requisitos
 
 - **Docker** e **Docker Compose**
 - **WSL Ubuntu** (22.04 recomendado)
@@ -34,18 +76,18 @@ fires-risk-monitor/
   Instalação recomendada (Ubuntu):  
   ```bash
   sudo apt-get update && sudo apt-get install -y curl gnupg
-  curl -fsSL https://www.mongodb.org/static/pgp/server-7.0.asc | \
-    sudo gpg --dearmor -o /usr/share/keyrings/mongodb-server-7.0.gpg
+  curl -fsSL https://www.mongodb.org/static/pgp/server-7.0.asc |     sudo gpg --dearmor -o /usr/share/keyrings/mongodb-server-7.0.gpg
   source /etc/os-release
-  echo "deb [ arch=amd64,arm64 signed-by=/usr/share/keyrings/mongodb-server-7.0.gpg ] https://repo.mongodb.org/apt/ubuntu $UBUNTU_CODENAME/mongodb-org/7.0 multiverse" | \
-    sudo tee /etc/apt/sources.list.d/mongodb-org-7.0.list
+  echo "deb [ arch=amd64,arm64 signed-by=/usr/share/keyrings/mongodb-server-7.0.gpg ] https://repo.mongodb.org/apt/ubuntu $UBUNTU_CODENAME/mongodb-org/7.0 multiverse" |     sudo tee /etc/apt/sources.list.d/mongodb-org-7.0.list
   sudo apt-get update
   sudo apt-get install -y mongodb-mongosh
   ```
 
-> Dica: em Ubuntu 22.04 (OpenSSL 3), se necessário use `mongodb-mongosh-shared-openssl3`.
+> 💡 Em Ubuntu 22.04 (OpenSSL 3), se necessário use `mongodb-mongosh-shared-openssl3`.
 
-## Subir o MongoDB
+---
+
+## 🚀 Subir o MongoDB
 
 Na raiz do projeto:
 
@@ -61,7 +103,9 @@ No primeiro start, o script **mongo-init.js** cria:
 - coleção de referência: `ref_municipios`
 - índices básicos
 
-## Testes rápidos (conexão)
+---
+
+## 🧪 Testes rápidos (conexão)
 
 ```bash
 # Ping como root (DB admin)
@@ -73,7 +117,9 @@ mongosh "mongodb://etl_user:etl_pass@localhost:27017/fires" --eval "db.getCollec
 
 Saída esperada: `raw_fires`, `raw_weather`, `ref_municipios`.
 
-## Variáveis de Ambiente
+---
+
+## 🔐 Variáveis de Ambiente
 
 Crie `configs/.env` a partir de `configs/.env.example`:
 
@@ -81,7 +127,9 @@ Crie `configs/.env` a partir de `configs/.env.example`:
 MONGO_URI=mongodb://etl_user:etl_pass@localhost:27017/fires?authSource=fires
 ```
 
-## Próximas Etapas
+---
+
+## 📋 Próximas Etapas
 
 1. **ETAPA 2 — Ingestão INPE (últimos 7 dias)**  
    - Script: `etl/inpe/fetch_fires.py`
@@ -92,7 +140,9 @@ MONGO_URI=mongodb://etl_user:etl_pass@localhost:27017/fires?authSource=fires
 
 Cada etapa terá passos curtos e verificações.
 
-## Troubleshooting
+---
+
+## 🧭 Troubleshooting
 
 - **Porta 27017 já em uso**  
   Pare processos/containers que usam essa porta, ou mude a porta do serviço no `docker-compose.yml`.
@@ -103,5 +153,7 @@ Cada etapa terá passos curtos e verificações.
 - **Permissão de escrita em `data/mongo`**  
   Garanta que a pasta exista e tenha permissão para o usuário do Docker Desktop/WSL.
 
-## Licença
+---
+
+## 🪪 Licença
 MIT
